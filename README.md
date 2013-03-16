@@ -6,5 +6,5 @@ We are trying to implement the replication and transactional part of Google Span
 [paper](http://static.googleusercontent.com/external_content/untrusted_dlcp/research.google.com/en/us/archive/spanner-osdi2012.pdf).
 
 Overview
-========
+--------
 To our understanding, this part is basically a 2PC (2-Phase Commit) over Paxos replication.
