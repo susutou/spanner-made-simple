@@ -7,3 +7,9 @@
 
 
 *.class
+
+.DS_Store
+.metadata
+spanner/.classpath
+spanner/.project
+spanner/.settings/
