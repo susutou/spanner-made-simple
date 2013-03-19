@@ -1,6 +1,7 @@
 package paxos;
 
 import network.Agent;
+import network.Messages;
 
 public class AcceptMsg extends Messages {
 

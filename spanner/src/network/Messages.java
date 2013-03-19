@@ -1,6 +1,5 @@
-package paxos;
+package network;
 
-import network.Agent;
 
 public abstract class Messages {
 	
