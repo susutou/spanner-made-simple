@@ -15,12 +15,16 @@ public class Requests {
 
 	public static void sendRequestToPaxosLeader(String sender, int port,
 			String msg) throws Exception {
-		if (sender.contains("X"))
+		if (sender.contains("X")){
 			sendRequestTo(Agents.paxos_leaders[0], Agents.paxosPort, sender
 					+ "#" + msg);
-		else if (sender.contains("Y"))
+			System.out.println(sender+"#"+msg);
+		}
+		else if (sender.contains("Y")){
 			sendRequestTo(Agents.paxos_leaders[1], Agents.paxosPort, sender
 					+ "#" + msg);
+			System.out.println(sender+"#"+msg);	
+		}
 		else {
 			System.out.println("Server Name Error");
 		}
