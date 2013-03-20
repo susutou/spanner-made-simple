@@ -50,37 +50,37 @@ public class Client extends Thread {
 	public void handle2PCMessage(String msg, TwoPCAgent agent) {
 
 		if (msg.startsWith("2pc_prepare")) {
-			logger.log("<<<--Get 2pc_prepare Msg--<<<: " + msg);
+			logger.log("<<<--Get 2pc_prepare Msg--<<<: " + msg+"\n");
 			agent.receive2PCPrepare(msg);
 
 		} else if (msg.startsWith("2pc_prepare_ack")) {
-			logger.log("<<<--Get 2pc_prepare_ack Msg--<<<: " + msg);
+			logger.log("<<<--Get 2pc_prepare_ack Msg--<<<: " + msg+"\n");
 			agent.receive2PCACK(msg);
 
 		} else if (msg.startsWith("2pc_commit")) {
-			logger.log("<<<--Get 2pc_commit Msg--<<<: " + msg);
+			logger.log("<<<--Get 2pc_commit Msg--<<<: " + msg+"\n");
 			agent.commit2PC(msg);
 
 		} else if (msg.startsWith("2pc_abort")) {
-			logger.log("<<<--Get 2pc_abort Msg--<<<: " + msg);
+			logger.log("<<<--Get 2pc_abort Msg--<<<: " + msg+"\n");
 			agent.abort2PC(msg);
 
 		} else if (msg.startsWith("paxos_ready")) {
-			logger.log("<<<--Get paxos_ready Msg--<<<: " + msg);
+			logger.log("<<<--Get paxos_ready Msg--<<<: " + msg+"\n");
 			agent.send2PCACK(msg);
 
 		} else if (msg.startsWith("paxos_fail")) {
-			logger.log("<<<--Get paxos_fail Msg--<<<: " + msg);
+			logger.log("<<<--Get paxos_fail Msg--<<<: " + msg+"\n");
 			agent.setPaxosFail();
 
 		} else if (msg.startsWith("read") || msg.startsWith("write")
 				|| msg.startsWith("begin") || msg.startsWith("commit")
 				|| msg.startsWith("abort")) {
 			
-			logger.log("<<<--Get Operation Msg--<<<: " + msg);
+			logger.log("<<<--Get Operation Msg--<<<: " + msg+"\n");
 			agent.appendToMsgQueue(msg);
 		} else {
-			System.out.println("Unrecognized Command: " + msg);
+			System.out.println("Unrecognized Command: " + msg+"\n");
 		}
 
 	}

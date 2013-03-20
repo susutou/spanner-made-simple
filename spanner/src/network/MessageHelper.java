@@ -41,4 +41,12 @@ public class MessageHelper {
 		String[] params = msg.split("#", 2);
 		return params[1];
 	}
+	public static String getOpsFromOperation(String operation){
+		//operation = operations#txnId#opID
+				String[] params = operation.split("#");
+				return params[0];
+	}
+	
+	
+	
 }

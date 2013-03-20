@@ -30,14 +30,14 @@ public class TwoPCAgent extends Agents implements Runnable {
 		send2PCPrepare(operation);
 		
 		String opID = MessageHelper.getOpIDFromOperation(operation);
-		
+		String ops = MessageHelper.getOpsFromOperation(operation);
 		//set for time-out
 		long startTime = System.currentTimeMillis() / 1000 + 10;
 		
 		while (Utilities.checkFlag()) {
 			
 			//check whether all cohorts are ready
-			if (isAllPrepared(opID))
+			if (isAllPrepared(opID,ops))
 				return true;
 			//10s time out
 			if (System.currentTimeMillis() / 1000 > startTime) {
@@ -53,7 +53,7 @@ public class TwoPCAgent extends Agents implements Runnable {
 		receivedAck.put(opID, 0);
 		String newMsg = "2pc_prepare#"+msg;
 		try {
-			logger.log(">>>--Send 2PC-Prepare MSG To 2PC Cohort--->>>: " + newMsg);
+			logger.log(">>>--Send 2PC-Prepare MSG To 2PC Cohort--->>>: " + newMsg+"\n");
 			Requests.sendRequestTo2PCCohort(Utilities.getServerName(), newMsg);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -66,7 +66,7 @@ public class TwoPCAgent extends Agents implements Runnable {
 		String newMsg = "paxos_prepare#"+MessageHelper.removeHeaderFromMsg(msg);
 		
 		try {
-			System.out.println(">>>--Send 2PC-Prepare MSG To Paxos Leader--->>>: " + newMsg);
+			logger.log(">>>--Send 2PC-Prepare MSG To Paxos Leader--->>>: " + newMsg+"\n");
 			Requests.sendRequestToPaxosLeader(Utilities.getServerName(), newMsg);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -98,7 +98,7 @@ public class TwoPCAgent extends Agents implements Runnable {
 		receivedAck.put(opID,receivedAck.get(opID)+1);
 	}
 
-	public boolean isAllPrepared(String opID) {
+	public boolean isAllPrepared(String opID, String ops) {
 		if(paxosFailure) {
 			paxosFailure = false;
 			return false;
@@ -109,17 +109,24 @@ public class TwoPCAgent extends Agents implements Runnable {
 			return false;
 		}
 		
-		if(receivedAck.get(opID) >= Agents.get2PCCohortSize())
-			return true;
 		
+		if( !ops.contains("X") && !ops.contains("Y") ){
+			if( receivedAck.get(opID) >= Agents.get2PCCohortSize())
+				return true;
+			}
+		else{
+			if( receivedAck.get(opID) >= 1)
+				return true;
+		}
+				
 		return false;
 	}
 
 	public void commit2PC(String msg) {
 		//msg = 2pc_commit#operations#txnID#opID
 		String newMsg = "paxos_commit#"+MessageHelper.removeHeaderFromMsg(msg);
-		logger.log(">>>--Send 2PC-Commit MSG To Paxos Leader--->>>: " + newMsg);
-		logger.log("<<<--Operation Committed!--->>>: " + newMsg);
+		logger.log(">>>--Send 2PC-Commit MSG To Paxos Leader--->>>: " + newMsg+"\n");
+		logger.log("<<<--Operation Committed!--->>>: " + newMsg+"\n");
 		try {
 			Requests.sendRequestToPaxosLeader(Utilities.getServerName(), newMsg);
 		} catch (Exception e) {
@@ -130,8 +137,8 @@ public class TwoPCAgent extends Agents implements Runnable {
 	public void abort2PC(String msg) {
 		//msg = 2pc_commit#operations#txnID#opID
 		String newMsg = "paxos_abort#"+MessageHelper.removeHeaderFromMsg(msg);
-		logger.log(">>>--Send 2PC-Abort MSG To Paxos Leader--->>>: " + newMsg);
-		logger.log("<<<--Operation Aborted!--->>>: " + newMsg);
+		logger.log(">>>--Send 2PC-Abort MSG To Paxos Leader--->>>: " + newMsg+"\n");
+		logger.log("<<<--Operation Aborted!--->>>: " + newMsg+"\n");
 		try {
 			Requests.sendRequestToPaxosLeader(Utilities.getServerName(), newMsg);
 		} catch (Exception e) {
@@ -143,7 +150,7 @@ public class TwoPCAgent extends Agents implements Runnable {
 		//msg = operations#txnID#opID
 		String newMsg = "2pc_commit#"+msg;
 		try {
-			logger.log(">>>--Send 2PC-Commit MSG To 2PC Cohort--->>>: " + newMsg);
+			logger.log(">>>--Send 2PC-Commit MSG To 2PC Cohort--->>>: " + newMsg+"\n");
 			Requests.sendRequestTo2PCCohort(Utilities.getServerName(),newMsg);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -154,7 +161,7 @@ public class TwoPCAgent extends Agents implements Runnable {
 		//msg = operations#txnID#opID
 		String newMsg = "2pc_abort#"+msg;
 		try {
-			logger.log(">>>--Send 2PC-Abort MSG To 2PC Cohort--->>>: " + newMsg);
+			logger.log(">>>--Send 2PC-Abort MSG To 2PC Cohort--->>>: " + newMsg+"\n");
 			Requests.sendRequestTo2PCCohort(Utilities.getServerName(),newMsg);
 		} catch (Exception e) {
 			e.printStackTrace();
