@@ -98,12 +98,12 @@ public class Client extends Thread {
 				System.in));
 		try {
 			int opCounter = 1;
+			
+			System.out.println("Please type in transactions:");
+			System.out
+					.println("The command should be in this syntax: "
+							+ "[TxnID]@[operations],[keys],[value]. For example, 1@read,column1");
 			while (true) {
-				System.out.println("Please type in transactions:");
-				System.out
-						.println("The command should be in this syntax: "
-								+ "[TxnID]@[operations],[keys],[value]. For example, 1@read,column1");
-				
 				String msg = stdIn.readLine().trim();
 				if ("exit".equals(msg))
 					break;
