@@ -1,11 +1,11 @@
 package paxos;
 
-import network.Agent;
+import network.Agents;
 import network.Messages;
 
 public class PrepareMsg extends Messages {
 
-	public PrepareMsg(Agent sender) {
+	public PrepareMsg(Agents sender) {
 		super(sender);
 		// TODO Auto-generated constructor stub
 	}

@@ -1,15 +1,10 @@
 package paxos;
 
-import network.Agent;
+import network.Agents;
 
-public class PaxosAgent extends Agent implements Runnable{
+public class PaxosAgent extends Agents implements Runnable{
 
-	
-	
 	public void run(){
 		
 	}
-	
-	
-	
 }

@@ -12,6 +12,23 @@ public class Requests {
 		socket.close();
     }
 	
+	public static void sendRequestToPaxosLeader(String sender, int port, String msg) throws Exception{
+		
+	}
+	
+	public static void sendRequestToPaxosLeader(String sender, String msg) throws Exception{
+		
+	}
+	
+	public static void sendRequestTo2PCCohort(String sender, String msg) throws Exception{
+		
+	}
+	
+	
+	
+	public static void sendRequestToServer(String serverName, String msg) throws Exception{
+		sendRequestTo(Agents.getIP(serverName),Agents.port,msg);
+	}
 	
 	
 	

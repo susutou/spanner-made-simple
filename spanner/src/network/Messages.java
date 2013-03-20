@@ -3,9 +3,9 @@ package network;
 
 public abstract class Messages {
 	
-	protected Agent sender;
+	protected Agents sender;
 
-    public Messages(Agent sender) {
+    public Messages(Agents sender) {
         this.sender = sender;
     }
 
