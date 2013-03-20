@@ -13,17 +13,27 @@ public class Requests {
 		socket.close();
 	}
 
+	public static void sendRequestTo2PC(String sender, String msg) throws Exception{
+		if(sender.contains("X")){
+			sendRequestTo(Agents.tpc_corhort[0], Agents.port, sender
+					+ "#" + msg);
+		}else if(sender.contains("Y")){
+			sendRequestTo(Agents.tpc_corhort[1], Agents.port, sender
+					+ "#" + msg);
+		}
+	}
+	
 	public static void sendRequestToPaxosLeader(String sender, int port,
 			String msg) throws Exception {
 		if (sender.contains("X")){
 			sendRequestTo(Agents.paxos_leaders[0], Agents.paxosPort, sender
 					+ "#" + msg);
-			System.out.println(sender+"#"+msg);
+			//System.out.println(sender+"#"+msg);
 		}
 		else if (sender.contains("Y")){
 			sendRequestTo(Agents.paxos_leaders[1], Agents.paxosPort, sender
 					+ "#" + msg);
-			System.out.println(sender+"#"+msg);	
+			//System.out.println(sender+"#"+msg);	
 		}
 		else {
 			System.out.println("Server Name Error");
