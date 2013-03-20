@@ -45,8 +45,10 @@ public class Requests {
 
 	public static void sendRequestTo2PCCohort(String sender, String msg)
 			throws Exception {
-		for (String hostname : Agents.tpc_corhort) {
-			sendRequestTo(hostname, Agents.port, msg);
+		if(msg.contains("X")){
+			sendRequestTo(Agents.tpc_corhort[0], Agents.port, msg);
+		}else if(msg.contains("Y")){
+			sendRequestTo(Agents.tpc_corhort[1], Agents.port, msg);
 		}
 	}
 
