@@ -15,7 +15,7 @@ public class Agents {
 	public static String NVX = "ec2-23-21-13-52.compute-1.amazonaws.com";
 	
 	public static String EUX = "ec2-54-228-101-94.eu-west-1.compute.amazonaws.com";
-	public static String EUY = "ec2-54-228-106-253.eu-west-1.compute.amazonaws.com";
+	public static String EUY = "ec2-54-228-106-12.eu-west-1.compute.amazonaws.com";
 	
 	
 	public static String coordinator = NVY;
