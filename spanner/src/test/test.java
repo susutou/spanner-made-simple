@@ -4,20 +4,15 @@ public class test {
 
 	public static void main(String[] args){
 		
-		everLoop lp = new everLoop();
+		int i = 0;
 		
-		lp.start();
+		System.out.println("ttest"+i++);
+		System.out.println("ttest"+i++);
+		System.out.println("ttest"+i++);
 		
-		lp.printloop();
-		int i=0;
-		while(i<100000){
-			i++;
-			lp.setI(i);
-			
-		}
-		
-		
-		
+		String[] msg = "header#ops#id2#id3".split("#", 2);
+		System.out.println(msg[0]);
+		System.out.println(msg[1]);
 	}
 	
 	

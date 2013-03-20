@@ -16,18 +16,18 @@ public class TwoPCAgent extends Agents implements Runnable {
 	private boolean tpcFailure = false;
 	private Map<String, Integer> receivedAck = new Hashtable<String,Integer>();
 	
-	
 	public void appendToMsgQueue(String operation) {
+		//operations#txnID#opID
 		operationsQueue.offer(operation);
 	}
 
-	
 	public boolean prepare2PC(String operation) {
+		//operation = operations#txnID#opID
 		
 		//send to cohorts the prepare message.
 		send2PCPrepare(operation);
 		
-		String msgID = "";
+		String opID = MessageHelper.getOpIDFromOperation(operation);
 		
 		//set for time-out
 		long startTime = System.currentTimeMillis() / 1000 + 10;
@@ -35,7 +35,7 @@ public class TwoPCAgent extends Agents implements Runnable {
 		while (Utilities.checkFlag()) {
 			
 			//check whether all cohorts are ready
-			if (isAllPrepared(msgID))
+			if (isAllPrepared(opID))
 				return true;
 			//10s time out
 			if (System.currentTimeMillis() / 1000 > startTime) {
@@ -46,33 +46,28 @@ public class TwoPCAgent extends Agents implements Runnable {
 	}
 	
 	public void send2PCPrepare(String msg){
-		
-		String msgID = "";
-		receivedAck.put(msgID, 0);
-		
+		//msg = operations#txnID#opID
+		String opID = MessageHelper.getOpIDFromOperation(msg);
+		receivedAck.put(opID, 0);
+		String newMsg = "2pc_prepare#"+msg;
 		try {
-			Requests.sendRequestTo2PCCohort(Utilities.getServerName(), "2pc_prepare");
+			System.out.println(">>>--Send 2PC-Prepare MSG To 2PC Cohort--->>>: " + newMsg);
+			Requests.sendRequestTo2PCCohort(Utilities.getServerName(), newMsg);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 	//2PC cohorts receive 2pc_prepare message
 	public void receive2PCPrepare(String msg) {
-		
-		String operation = MessageHelper.parseMsg(msg);
-		String txnID = ""; 		
-				
+		//msg = 2pc_prepare#operations#txnID#opID
+		String newMsg = "paxos_prepare#"+MessageHelper.removeHeaderFromMsg(msg);
 		try {
-			System.out.println(">>>--Send 2PC-Prepare MSG To Paxos Leader--->>>: " + msg);
-			Requests.sendRequestToPaxosLeader(Utilities.getServerName(), "2pc_prepate"+"#"+txnID);
+			System.out.println(">>>--Send 2PC-Prepare MSG To Paxos Leader--->>>: " + newMsg);
+			Requests.sendRequestToPaxosLeader(Utilities.getServerName(), newMsg);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 	public void setPaxosFail(){
@@ -84,22 +79,23 @@ public class TwoPCAgent extends Agents implements Runnable {
 	}
 	
 	public void send2PCACK(String msg) {
+		//msg = paxos_ready#operations#txnID#opID
+		String newMsg = "2pc_prepare_ack#" + MessageHelper.removeHeaderFromMsg(msg);
 		try {
-			String txnID="";
-			Requests.sendRequestTo(Agents.coordinator, Agents.port, "2pc_prepare_ack"+"#"+txnID);
+			Requests.sendRequestTo(Agents.coordinator, Agents.port, newMsg);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public void receive2PCACK(String msg) {
+		//msg = 2pc_prepare_ack#operations#txnID#opID
+		String opID = MessageHelper.getOpIDFromHeaderMsg(msg);  
 		
-		String msgID = "";  
-		
-		receivedAck.put(msgID,receivedAck.get(msgID)+1);
+		receivedAck.put(opID,receivedAck.get(opID)+1);
 	}
 
-	public boolean isAllPrepared(String msgID) {
+	public boolean isAllPrepared(String opID) {
 		if(paxosFailure) {
 			paxosFailure = false;
 			return false;
@@ -109,57 +105,62 @@ public class TwoPCAgent extends Agents implements Runnable {
 			tpcFailure = false;
 			return false;
 		}
+		
+		if(receivedAck.get(opID) >= Agents.get2PCCohortSize())
+			return true;
+		
 		return false;
 	}
 
 	public void commit2PC(String msg) {
-		String txnID = "";
-		System.out.println(">>>--Send 2PC-Commit MSG To Paxos Leader--->>>: " + msg);
+		//msg = 2pc_commit#operations#txnID#opID
+		String newMsg = "paxos_commit#"+MessageHelper.removeHeaderFromMsg(msg);
+		System.out.println(">>>--Send 2PC-Commit MSG To Paxos Leader--->>>: " + newMsg);
 		try {
-			Requests.sendRequestToPaxosLeader(Utilities.getServerName(), "2pc_commit"+"#"+txnID);
+			Requests.sendRequestToPaxosLeader(Utilities.getServerName(), newMsg);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	public void abort2PC(String msg) {
-		String txnID = "";
-		System.out.println(">>>--Send 2PC-Abort MSG To Paxos Leader--->>>: " + msg);
+		//msg = 2pc_commit#operations#txnID#opID
+		String newMsg = "paxos_abort#"+MessageHelper.removeHeaderFromMsg(msg);
+		System.out.println(">>>--Send 2PC-Abort MSG To Paxos Leader--->>>: " + newMsg);
 		try {
-			Requests.sendRequestToPaxosLeader(Utilities.getServerName(), "2pc_abort"+"#"+txnID);
+			Requests.sendRequestToPaxosLeader(Utilities.getServerName(), newMsg);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	public void sendCommit2PC(String msg){
-		String txnID = "";
-		
+		//msg = operations#txnID#opID
+		String newMsg = "2pc_commit#"+msg;
 		try {
-			Requests.sendRequestTo2PCCohort(Utilities.getServerName(),"2pc_commit"+"#"+txnID);
+			System.out.println(">>>--Send 2PC-Commit MSG To 2PC Cohort--->>>: " + newMsg);
+			Requests.sendRequestTo2PCCohort(Utilities.getServerName(),newMsg);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	public void sendAbort2PC(String msg){
-		String txnID = "";
+		//msg = operations#txnID#opID
+		String newMsg = "2pc_abort#"+msg;
 		try {
-			Requests.sendRequestTo2PCCohort(Utilities.getServerName(),"2pc_abort"+"#"+txnID);
+			System.out.println(">>>--Send 2PC-Abort MSG To 2PC Cohort--->>>: " + newMsg);
+			Requests.sendRequestTo2PCCohort(Utilities.getServerName(),newMsg);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	public void run() {
 
 		while (Utilities.checkFlag()) {
 			if (!operationsQueue.isEmpty()) {
+				//msg = operations#txnID#opID
 				String msg = operationsQueue.poll();
 				if (prepare2PC(msg)) {
 					sendCommit2PC(msg);
