@@ -4,6 +4,8 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import log.logger;
 import util.Utilities;
 import network.Agents;
 import network.MessageHelper;
@@ -51,7 +53,7 @@ public class TwoPCAgent extends Agents implements Runnable {
 		receivedAck.put(opID, 0);
 		String newMsg = "2pc_prepare#"+msg;
 		try {
-			System.out.println(">>>--Send 2PC-Prepare MSG To 2PC Cohort--->>>: " + newMsg);
+			logger.log(">>>--Send 2PC-Prepare MSG To 2PC Cohort--->>>: " + newMsg);
 			Requests.sendRequestTo2PCCohort(Utilities.getServerName(), newMsg);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -116,7 +118,8 @@ public class TwoPCAgent extends Agents implements Runnable {
 	public void commit2PC(String msg) {
 		//msg = 2pc_commit#operations#txnID#opID
 		String newMsg = "paxos_commit#"+MessageHelper.removeHeaderFromMsg(msg);
-		System.out.println(">>>--Send 2PC-Commit MSG To Paxos Leader--->>>: " + newMsg);
+		logger.log(">>>--Send 2PC-Commit MSG To Paxos Leader--->>>: " + newMsg);
+		logger.log("<<<--Operation Committed!--->>>: " + newMsg);
 		try {
 			Requests.sendRequestToPaxosLeader(Utilities.getServerName(), newMsg);
 		} catch (Exception e) {
@@ -127,7 +130,8 @@ public class TwoPCAgent extends Agents implements Runnable {
 	public void abort2PC(String msg) {
 		//msg = 2pc_commit#operations#txnID#opID
 		String newMsg = "paxos_abort#"+MessageHelper.removeHeaderFromMsg(msg);
-		System.out.println(">>>--Send 2PC-Abort MSG To Paxos Leader--->>>: " + newMsg);
+		logger.log(">>>--Send 2PC-Abort MSG To Paxos Leader--->>>: " + newMsg);
+		logger.log("<<<--Operation Aborted!--->>>: " + newMsg);
 		try {
 			Requests.sendRequestToPaxosLeader(Utilities.getServerName(), newMsg);
 		} catch (Exception e) {
@@ -139,7 +143,7 @@ public class TwoPCAgent extends Agents implements Runnable {
 		//msg = operations#txnID#opID
 		String newMsg = "2pc_commit#"+msg;
 		try {
-			System.out.println(">>>--Send 2PC-Commit MSG To 2PC Cohort--->>>: " + newMsg);
+			logger.log(">>>--Send 2PC-Commit MSG To 2PC Cohort--->>>: " + newMsg);
 			Requests.sendRequestTo2PCCohort(Utilities.getServerName(),newMsg);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -150,7 +154,7 @@ public class TwoPCAgent extends Agents implements Runnable {
 		//msg = operations#txnID#opID
 		String newMsg = "2pc_abort#"+msg;
 		try {
-			System.out.println(">>>--Send 2PC-Abort MSG To 2PC Cohort--->>>: " + newMsg);
+			logger.log(">>>--Send 2PC-Abort MSG To 2PC Cohort--->>>: " + newMsg);
 			Requests.sendRequestTo2PCCohort(Utilities.getServerName(),newMsg);
 		} catch (Exception e) {
 			e.printStackTrace();

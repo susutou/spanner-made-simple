@@ -18,7 +18,7 @@ public class Agents {
 	public static String EUY = "ec2-54-228-106-12.eu-west-1.compute.amazonaws.com";
 	
 	
-	public static String coordinator = NVY;
+	public static String coordinator = ORX;
 	
 	public static String[] paxos_leaders = new String[]{NVX,NVY};
 	public static String[] tpc_corhort = new String[]{ORX,ORY};

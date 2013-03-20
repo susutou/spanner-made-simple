@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import log.logger;
+
 import network.Agents;
 import network.MessageHelper;
 import network.Requests;
@@ -48,34 +50,34 @@ public class Client extends Thread {
 	public void handle2PCMessage(String msg, TwoPCAgent agent) {
 
 		if (msg.startsWith("2pc_prepare")) {
-			System.out.println("<<<--Get 2pc_prepare Msg--<<<: " + msg);
+			logger.log("<<<--Get 2pc_prepare Msg--<<<: " + msg);
 			agent.receive2PCPrepare(msg);
 
 		} else if (msg.startsWith("2pc_prepare_ack")) {
-			System.out.println("<<<--Get 2pc_prepare_ack Msg--<<<: " + msg);
+			logger.log("<<<--Get 2pc_prepare_ack Msg--<<<: " + msg);
 			agent.receive2PCACK(msg);
 
 		} else if (msg.startsWith("2pc_commit")) {
-			System.out.println("<<<--Get 2pc_commit Msg--<<<: " + msg);
+			logger.log("<<<--Get 2pc_commit Msg--<<<: " + msg);
 			agent.commit2PC(msg);
 
 		} else if (msg.startsWith("2pc_abort")) {
-			System.out.println("<<<--Get 2pc_abort Msg--<<<: " + msg);
+			logger.log("<<<--Get 2pc_abort Msg--<<<: " + msg);
 			agent.abort2PC(msg);
 
 		} else if (msg.startsWith("paxos_ready")) {
-			System.out.println("<<<--Get paxos_ready Msg--<<<: " + msg);
+			logger.log("<<<--Get paxos_ready Msg--<<<: " + msg);
 			agent.send2PCACK(msg);
 
 		} else if (msg.startsWith("paxos_fail")) {
-			System.out.println("<<<--Get paxos_fail Msg--<<<: " + msg);
+			logger.log("<<<--Get paxos_fail Msg--<<<: " + msg);
 			agent.setPaxosFail();
 
 		} else if (msg.startsWith("read") || msg.startsWith("write")
 				|| msg.startsWith("begin") || msg.startsWith("commit")
 				|| msg.startsWith("abort")) {
 			
-			System.out.println("<<<--Get Operation Msg--<<<: " + msg);
+			logger.log("<<<--Get Operation Msg--<<<: " + msg);
 			agent.appendToMsgQueue(msg);
 		} else {
 			System.out.println("Unrecognized Command: " + msg);
