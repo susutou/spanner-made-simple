@@ -49,7 +49,11 @@ public class Requests {
 			sendRequestTo(Agents.tpc_corhort[0], Agents.port, msg);
 		}else if(msg.contains("Y")){
 			sendRequestTo(Agents.tpc_corhort[1], Agents.port, msg);
+		}else{
+			sendRequestTo(Agents.tpc_corhort[0], Agents.port, msg);
+			sendRequestTo(Agents.tpc_corhort[1], Agents.port, msg);
 		}
+		
 	}
 
 	public static void sendRequestToServer(String serverName, String msg)
