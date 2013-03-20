@@ -67,6 +67,7 @@ public class TwoPCAgent extends Agents implements Runnable {
 		
 		try {
 			logger.log(">>>--Send 2PC-Prepare MSG To Paxos Leader--->>>: " + newMsg+"\n");
+			System.out.println(">>>--Send 2PC-Prepare MSG To Paxos Leader--->>>: " + newMsg+"\n");
 			Requests.sendRequestToPaxosLeader(Utilities.getServerName(), newMsg);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -174,6 +175,7 @@ public class TwoPCAgent extends Agents implements Runnable {
 			if (!operationsQueue.isEmpty()) {
 				//msg = operations#txnID#opID
 				String msg = operationsQueue.poll();
+				System.out.println("******Get a Msg From the Queue******: "+msg+"\n");
 				if (prepare2PC(msg)) {
 					sendCommit2PC(msg);
 				} else {
