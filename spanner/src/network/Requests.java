@@ -13,9 +13,12 @@ public class Requests {
     }
 	
 	public static void sendRequestToPaxosLeader(String sender, int port, String msg) throws Exception{
-		for(String hostname : Agents.paxos_leaders){
-			sendRequestTo(hostname,Agents.paxosPort,sender+"#"+msg);
-		}
+		if(msg.contains("Susen"))
+			sendRequestTo(Agents.paxos_leaders[0],Agents.paxosPort,sender+"#"+msg);
+		else if(msg.contains("Bo"))
+			sendRequestTo(Agents.paxos_leaders[1],Agents.paxosPort,sender+"#"+msg);
+		else
+			sendRequestTo(Agents.paxos_leaders[0],Agents.paxosPort,sender+"#"+msg);
 	}
 	
 	public static void sendRequestToPaxosLeader(String sender, String msg) throws Exception{

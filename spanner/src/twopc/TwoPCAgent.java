@@ -62,6 +62,7 @@ public class TwoPCAgent extends Agents implements Runnable {
 	public void receive2PCPrepare(String msg) {
 		//msg = 2pc_prepare#operations#txnID#opID
 		String newMsg = "paxos_prepare#"+MessageHelper.removeHeaderFromMsg(msg);
+		
 		try {
 			System.out.println(">>>--Send 2PC-Prepare MSG To Paxos Leader--->>>: " + newMsg);
 			Requests.sendRequestToPaxosLeader(Utilities.getServerName(), newMsg);

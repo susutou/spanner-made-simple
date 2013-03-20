@@ -5,8 +5,8 @@ import java.util.Map;
 
 public class Agents {
 
-	public static int port = 7777;
-	public static int paxosPort = 8888;
+	public static int port = 7766;
+	public static int paxosPort = 6666;
 	
 	public static String ORX = "ec2-54-244-154-181.us-west-2.compute.amazonaws.com";
 	public static String ORY = "ec2-54-245-188-21.us-west-2.compute.amazonaws.com";
@@ -20,7 +20,7 @@ public class Agents {
 	
 	public static String coordinator = NVY;
 	
-	public static String[] paxos_leaders = new String[]{NVY,NVX};
+	public static String[] paxos_leaders = new String[]{NVX,NVY};
 	public static String[] tpc_corhort = new String[]{ORX,ORY};
 	
 	//the mapping of names and ips
