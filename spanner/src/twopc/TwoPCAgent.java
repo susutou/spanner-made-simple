@@ -103,7 +103,7 @@ public class TwoPCAgent extends Agents implements Runnable {
 	}
 
 	public boolean isAllPrepared(String opID, String ops) {
-		/*
+		
 		if(paxosFailure) {
 			paxosFailure = false;
 			return false;
@@ -125,8 +125,6 @@ public class TwoPCAgent extends Agents implements Runnable {
 		}
 				
 		return false;
-		*/
-		return true;
 	}
 
 	public void commit2PC(String msg) {
