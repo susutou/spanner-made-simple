@@ -15,11 +15,9 @@ public class Requests {
 
 	public static void sendRequestTo2PC(String sender, String msg) throws Exception{
 		if(sender.contains("X")){
-			sendRequestTo(Agents.tpc_corhort[0], Agents.port, sender
-					+ "#" + msg);
+			sendRequestTo(Agents.tpc_corhort[0], Agents.port, "paxos_ready#"+msg);
 		}else if(sender.contains("Y")){
-			sendRequestTo(Agents.tpc_corhort[1], Agents.port, sender
-					+ "#" + msg);
+			sendRequestTo(Agents.tpc_corhort[1], Agents.port, "paxos_ready#"+msg);
 		}
 	}
 	

@@ -70,7 +70,7 @@ public class TwoPCAgent extends Agents implements Runnable {
 			System.out.println(">>>--Send 2PC-Prepare MSG To Paxos Leader--->>>: " + newMsg+"\n");
 			Requests.sendRequestToPaxosLeader(Utilities.getServerName(), newMsg);
 			
-			Requests.sendRequestTo2PC(Utilities.getServerName(), "paxos_ready#"+MessageHelper.removeHeaderFromMsg(msg));
+			Requests.sendRequestTo2PC(Utilities.getServerName(), MessageHelper.removeHeaderFromMsg(msg));
 		
 		} catch (Exception e) {
 			e.printStackTrace();
