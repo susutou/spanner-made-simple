@@ -32,7 +32,7 @@ public class TwoPCAgent extends Agents implements Runnable {
 		String opID = MessageHelper.getOpIDFromOperation(operation);
 		String ops = MessageHelper.getOpsFromOperation(operation);
 		//set for time-out
-		long startTime = System.currentTimeMillis() / 1000 + 10;
+		long startTime = System.currentTimeMillis() / 1000 + 3;
 		
 		while (Utilities.checkFlag()) {
 			
@@ -100,6 +100,7 @@ public class TwoPCAgent extends Agents implements Runnable {
 	}
 
 	public boolean isAllPrepared(String opID, String ops) {
+		/*
 		if(paxosFailure) {
 			paxosFailure = false;
 			return false;
@@ -121,6 +122,8 @@ public class TwoPCAgent extends Agents implements Runnable {
 		}
 				
 		return false;
+		*/
+		return true;
 	}
 
 	public void commit2PC(String msg) {
