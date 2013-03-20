@@ -72,8 +72,8 @@ public class Client extends Thread {
 			agent.setPaxosFail();
 
 		} else if (msg.startsWith("read") || msg.startsWith("write")
-				|| "begin".equals(msg) || "commit".equals(msg)
-				|| "abort".equals(msg)) {
+				|| msg.startsWith("begin") || msg.startsWith("commit")
+				|| msg.startsWith("abort")) {
 			
 			System.out.println("<<<--Get Operation Msg--<<<: " + msg);
 			agent.appendToMsgQueue(msg);
