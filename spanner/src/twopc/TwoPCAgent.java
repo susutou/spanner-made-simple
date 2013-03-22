@@ -69,9 +69,9 @@ public class TwoPCAgent extends Agents implements Runnable {
 			logger.log(">>>--Send 2PC-Prepare MSG To Paxos Leader--->>>: " + newMsg+"\n");
 			//System.out.println(">>>--Send 2PC-Prepare MSG To Paxos Leader--->>>: " + newMsg+"\n");
 			Requests.sendRequestToPaxosLeader(Utilities.getServerName(), newMsg);
-			logger.log("<<<--Get paxos_ready Msg--<<<: " + msg+"\n");
-			set2PCFailure();
-			//Requests.sendRequestTo2PC(Utilities.getServerName(), MessageHelper.removeHeaderFromMsg(msg));
+			//logger.log("<<<--Get paxos_ready Msg--<<<: " + msg+"\n");
+			//set2PCFailure();
+			Requests.sendRequestTo2PC(Utilities.getServerName(), MessageHelper.removeHeaderFromMsg(msg));
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -104,9 +104,6 @@ public class TwoPCAgent extends Agents implements Runnable {
 	}
 
 	public boolean isAllPrepared(String opID, String ops) {
-		
-		return tpcFailure;
-		/*
 		if(paxosFailure) {
 			paxosFailure = false;
 			return false;
@@ -116,7 +113,6 @@ public class TwoPCAgent extends Agents implements Runnable {
 			tpcFailure = false;
 			return false;
 		}
-		
 		
 		if( !ops.contains("X") && !ops.contains("Y") ){
 			if( receivedAck.get(opID) >= Agents.get2PCCohortSize())
@@ -128,7 +124,7 @@ public class TwoPCAgent extends Agents implements Runnable {
 		}
 				
 		return false;
-		*/
+		
 	}
 
 	public void commit2PC(String msg) {
